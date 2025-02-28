@@ -13,11 +13,14 @@ Ce document décrit la structure et l'utilisation de la base de données Postgre
 
 - **User** : Utilisateurs du système
 - **Account** : Comptes d'authentification liés aux utilisateurs
+- **Session** : Sessions d'authentification des utilisateurs
 - **Service** : Services proposés par l'entreprise
 - **Reservation** : Réservations effectuées par les utilisateurs
 - **ReservationItem** : Services inclus dans une réservation
 - **Devis** : Devis générés pour les clients
 - **DevisItem** : Services inclus dans un devis
+- **Avis** : Avis clients sur les services
+- **Contact** : Messages de contact envoyés via le formulaire
 
 ### Schéma
 
@@ -99,6 +102,54 @@ const user = userResult.rows[0];
 const insertSql = 'INSERT INTO "User" (id, name, email) VALUES ($1, $2, $3) RETURNING *';
 const result = await query(insertSql, [id, name, email]);
 ```
+
+## API Routes Implémentées
+
+### Authentification
+- `POST /api/auth/[...nextauth]` : Gestion de l'authentification via NextAuth.js
+
+### Services
+- `GET /api/services` : Récupération de tous les services
+- `GET /api/services/[id]` : Récupération d'un service spécifique
+
+### Réservations
+- `GET /api/reservations` : Récupération des réservations
+- `POST /api/reservations` : Création d'une nouvelle réservation
+- `GET /api/reservations/[id]` : Récupération d'une réservation spécifique
+- `PATCH /api/reservations/[id]` : Mise à jour d'une réservation
+- `DELETE /api/reservations/[id]` : Suppression d'une réservation
+
+### Calculateur de Prix
+- `POST /api/calculateur` : Calcul du prix en fonction des services sélectionnés
+
+### Avis
+- `GET /api/avis` : Récupération des avis publiés
+- `POST /api/avis` : Soumission d'un nouvel avis
+
+### Contact
+- `POST /api/contact` : Envoi d'un message via le formulaire de contact
+
+### Utilisateurs
+- `GET /api/user/reservations` : Récupération des réservations de l'utilisateur connecté
+- `GET /api/user/reservations/[id]` : Récupération d'une réservation spécifique de l'utilisateur
+
+### Administration
+- `GET /api/admin/dashboard` : Statistiques du tableau de bord
+- `GET /api/admin/services` : Gestion des services (admin)
+- `POST /api/admin/services` : Création d'un nouveau service
+- `GET /api/admin/services/[id]` : Détails d'un service
+- `PATCH /api/admin/services/[id]` : Mise à jour d'un service
+- `DELETE /api/admin/services/[id]` : Suppression d'un service
+- `GET /api/admin/users` : Gestion des utilisateurs
+- `POST /api/admin/users` : Création d'un nouvel utilisateur
+- `GET /api/admin/users/[id]` : Détails d'un utilisateur
+- `PATCH /api/admin/users/[id]` : Mise à jour d'un utilisateur
+- `DELETE /api/admin/users/[id]` : Suppression d'un utilisateur
+- `GET /api/admin/avis` : Gestion des avis
+- `GET /api/admin/contact` : Gestion des messages de contact
+- `GET /api/admin/contact/[id]` : Détails d'un message de contact
+- `PATCH /api/admin/contact/[id]` : Mise à jour d'un message de contact
+- `DELETE /api/admin/contact/[id]` : Suppression d'un message de contact
 
 ## Transactions
 

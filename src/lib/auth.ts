@@ -1,10 +1,9 @@
 import { NextAuthOptions } from 'next-auth';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { prisma } from './db';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import * as bcrypt from 'bcrypt';
+import { getPool, query } from './db';
 
-// Define the Account type based on our Prisma schema
+// Define the Account type based on our database schema
 type Account = {
   id: string;
   userId: string;
@@ -21,7 +20,6 @@ type Account = {
 };
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -35,33 +33,26 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          // Find user by email
-          const user = await prisma.user.findUnique({
-            where: {
-              email: credentials.email,
-            },
-            include: {
-              accounts: true,
-            },
-          });
-
-          if (!user) {
+          // Find user by email with credentials account
+          const userSql = `
+            SELECT u.*, a.id as account_id, a.access_token, a.provider, a.type
+            FROM "User" u
+            LEFT JOIN "Account" a ON u.id = a."userId"
+            WHERE u.email = $1 AND a.provider = 'credentials'
+          `;
+          
+          const userResult = await query(userSql, [credentials.email]);
+          
+          if (userResult.rows.length === 0) {
             return null;
           }
-
-          // Find the account with the password
-          const account = user.accounts.find(
-            (acc: Account) => acc.type === 'credentials'
-          );
-
-          if (!account) {
-            return null;
-          }
+          
+          const user = userResult.rows[0];
 
           // Verify password
           const passwordValid = await bcrypt.compare(
             credentials.password,
-            account.access_token || '' 
+            user.access_token || ''
           );
 
           if (!passwordValid) {
