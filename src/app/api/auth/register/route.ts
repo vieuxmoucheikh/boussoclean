@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { hash } from 'bcrypt';
 import { prisma } from '@/lib/db';
+import { PrismaClient } from '@prisma/client';
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,15 +28,28 @@ export async function POST(request: NextRequest) {
     // Hash password
     const hashedPassword = await hash(password, 10);
     
-    // Create user
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        // Note: In a real implementation, you need a proper way to store passwords
-        // This is just for demonstration - the actual password field is not in the schema
-        // You'd need to add a method to verify the password during login as well
-      },
+    // Create user with transaction to ensure both user and account are created
+    const user = await prisma.$transaction(async (tx: PrismaClient) => {
+      // Create the user
+      const newUser = await tx.user.create({
+        data: {
+          name,
+          email,
+        },
+      });
+      
+      // Create credentials account with hashed password
+      await tx.account.create({
+        data: {
+          userId: newUser.id,
+          type: 'credentials',
+          provider: 'credentials',
+          providerAccountId: email,
+          access_token: hashedPassword, // Store hashed password in access_token field
+        },
+      });
+      
+      return newUser;
     });
     
     // Remove sensitive data

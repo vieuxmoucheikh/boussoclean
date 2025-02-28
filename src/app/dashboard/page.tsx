@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import SignOutButton from '@/components/auth/SignOutButton';
+import { useAuth } from '@/hooks/useAuth';
 
 type Reservation = {
   id: string;
@@ -15,20 +16,15 @@ type Reservation = {
 };
 
 export default function Dashboard() {
-  const { data: session, status } = useSession();
+  const { session, isLoading, isAuthenticated } = useAuth();
   const router = useRouter();
   const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingData, setIsLoadingData] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
-    // If user is not authenticated, redirect to login
-    if (status === 'unauthenticated') {
-      router.push('/auth/signin');
-    }
-    
     // Fetch user's reservations if authenticated
-    if (status === 'authenticated') {
+    if (isAuthenticated) {
       const fetchReservations = async () => {
         try {
           const response = await fetch('/api/user/reservations');
@@ -43,15 +39,15 @@ export default function Dashboard() {
           console.error('Error fetching reservations:', error);
           setError('Impossible de récupérer vos réservations. Veuillez réessayer plus tard.');
         } finally {
-          setIsLoading(false);
+          setIsLoadingData(false);
         }
       };
       
       fetchReservations();
     }
-  }, [status, router]);
+  }, [isAuthenticated]);
   
-  if (status === 'loading' || isLoading) {
+  if (isLoading || isLoadingData) {
     return (
       <main className="min-h-screen py-12">
         <div className="container mx-auto px-4 max-w-6xl">
@@ -87,9 +83,10 @@ export default function Dashboard() {
                 <p className="text-gray-600">Email: {session?.user?.email}</p>
               </div>
               <div className="mt-4 md:mt-0">
-                <Link href="/dashboard/profile" className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <Link href="/dashboard/profile" className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mr-2">
                   Modifier mon profil
                 </Link>
+                <SignOutButton variant="secondary" />
               </div>
             </div>
           </div>

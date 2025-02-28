@@ -48,122 +48,83 @@ boussoclean/
 - [x] Création du projet Next.js avec TypeScript et Tailwind CSS
 - [x] Installation des dépendances principales
 - [x] Création du schéma Prisma
+- [x] Configuration de Git et GitHub
+- [x] Configuration de Supabase
+- [x] Configuration de NextAuth.js
 
-### 2. Développement des Pages et Composants (EN COURS)
-- [x] Développer les composants de mise en page (Header, Footer)
-- [x] Créer la page d'accueil
-- [x] Créer la page des services
-- [x] Créer la page des tarifs
-- [x] Créer la page de contact
-- [x] Créer la page "À propos"
-- [x] Créer la page des réalisations
-- [x] Créer la page des avis clients
-- [ ] Créer la page de réservation
-- [ ] Créer les composants UI de base avec shadcn/ui
+### 2. Configuration du Projet (EN COURS)
+- [x] Mise en place de la structure des dossiers
+- [x] Configuration de Tailwind CSS
+- [x] Configuration de l'environnement de développement
+- [x] Création des variables d'environnement (.env)
+- [ ] Migration du schéma Prisma vers Supabase
+- [ ] Configuration complète de l'authentification avec NextAuth.js
 
-### 3. Configuration de la Base de Données (À FAIRE)
-- [ ] Créer un compte Supabase et un nouveau projet
-- [ ] Configurer les tables dans Supabase selon le schéma Prisma
-- [ ] Récupérer les informations de connexion pour le fichier .env
+## Configuration des Services
 
-### 4. Configuration de l'Authentification (À FAIRE)
-- [ ] Configurer NextAuth.js avec l'adaptateur Prisma
-- [ ] Créer les pages de connexion/inscription
-- [ ] Implémenter la gestion des sessions
+### GitHub
+- [x] Initialisation du dépôt Git local
+- [x] Création du dépôt GitHub distant
+- [x] Premier commit et push
+- [x] Configuration du .gitignore
 
-### 5. Développement des Fonctionnalités Clés (À FAIRE)
-- [ ] Calculateur de tarifs interactif
-- [ ] Formulaire de devis rapide
-- [ ] Chatbot intégré
-- [ ] Système de réservation en ligne
-- [ ] Galerie avant/après
-- [ ] Espace avis clients
+### Supabase
+- [x] Création du projet Supabase
+- [x] Obtention des clés API et URL
+- [x] Configuration des variables d'environnement
+- [ ] Migration du schéma de base de données
+- [ ] Configuration des politiques de sécurité RLS (Row Level Security)
+- [ ] Configuration des buckets pour le stockage des images
 
-### 6. Déploiement (À FAIRE)
-- [ ] Créer un dépôt GitHub pour le projet
-- [ ] Connecter le dépôt à Vercel
-- [ ] Configurer les variables d'environnement dans Vercel
-- [ ] Déployer l'application
+### NextAuth.js
+- [x] Installation et configuration de base
+- [x] Intégration avec Prisma
+- [x] Configuration des pages d'authentification
+- [ ] Test complet du flux d'authentification
+- [ ] Configuration des callbacks et des hooks
+- [ ] Mise en place de la protection des routes
 
-## État Actuel du Projet (28/02/2025)
+### Vercel
+- [ ] Création du projet sur Vercel
+- [ ] Configuration des variables d'environnement sur Vercel
+- [ ] Premier déploiement
+- [ ] Configuration du domaine personnalisé
+- [ ] Mise en place des prévisualisations pour les pull requests
 
-### Pages Développées
-1. **Page d'accueil (page.tsx)**
-   - Section hero avec appel à l'action
-   - Section avantages
-   - Section services principaux
-   - Section témoignages
-   - Section appel à l'action final
+## Problèmes Connus et Solutions
 
-2. **Page des services (services/page.tsx)**
-   - Présentation détaillée de tous les services de nettoyage
-   - Sections pour chaque type de service (canapés, matelas, tapis, etc.)
-   - Descriptions des processus de nettoyage
-   - Boutons d'appel à l'action pour les devis
+### Problème de connexion Prisma à Supabase
+Nous avons rencontré des difficultés lors de la migration du schéma Prisma vers la base de données Supabase. Les commandes `prisma db push` et `prisma migrate dev` semblent avoir des problèmes de connexion.
 
-3. **Page des tarifs (tarifs/page.tsx)**
-   - Liste des prix pour chaque service
-   - Informations sur les remises pour services multiples
-   - Informations sur les traitements supplémentaires
+**Solution potentielle :**
+1. Vérifier que le format de l'URL de connexion est correct
+2. S'assurer que l'utilisateur PostgreSQL a les droits suffisants
+3. Vérifier les règles de pare-feu de Supabase
+4. Essayer d'utiliser l'interface SQL de Supabase pour créer manuellement les tables si nécessaire
 
-4. **Page de contact (contact/page.tsx)**
-   - Formulaire de contact
-   - Informations de contact de l'entreprise
-   - Section FAQ
-   - Carte de la zone de service
+## Prochaines Étapes
 
-5. **Page À propos (a-propos/page.tsx)**
-   - Histoire de l'entreprise
-   - Mission et valeurs
-   - Présentation de l'équipe
-   - Certifications et engagements
+1. **Finaliser la Configuration de la Base de Données**
+   - Résoudre les problèmes de migration Prisma
+   - Créer les tables nécessaires dans Supabase
+   - Configurer les relations entre les tables
 
-6. **Page des réalisations (realisations/page.tsx)**
-   - Galerie de travaux avant/après
-   - Filtres par type de service
-   - Témoignage en vedette
-   - Pagination
+2. **Compléter le Système d'Authentification**
+   - Tester le flux complet d'inscription et de connexion
+   - Implémenter la gestion des sessions
+   - Ajouter la récupération de mot de passe
 
-7. **Page des avis clients (avis/page.tsx)**
-   - Affichage des témoignages clients
-   - Système de notation avec étoiles
-   - Filtres par type de service
-   - Pagination
-   - Formulaire pour laisser un avis
+3. **Développer les Fonctionnalités Principales**
+   - Finaliser le système de réservation
+   - Implémenter le calculateur de tarifs
+   - Créer la galerie de réalisations
+   - Développer le système d'avis clients
 
-### Pages et Fonctionnalités à Développer
-1. **Page de réservation (reservation/page.tsx)**
-   - Calendrier de disponibilité
-   - Formulaire de réservation
-   - Sélection des services
-   - Paiement en ligne
-
-2. **Fonctionnalités Backend**
-   - Authentification utilisateur
-   - Gestion des devis
-   - Système de réservation
-   - Stockage des avis clients
-   - API pour le calculateur de tarifs
-
-3. **Intégrations**
-   - Intégration de paiement
-   - Intégration de calendrier
-   - Notifications par email
-   - Chatbot pour assistance client
-
-### Prochaines Étapes Immédiates
-1. Créer la page de réservation
-2. Configurer la base de données Supabase
-3. Implémenter l'authentification utilisateur
-4. Développer les fonctionnalités backend pour les formulaires
-5. Connecter les pages aux données réelles provenant de la base de données
-
-### Notes Techniques
-- Le schéma Prisma est défini mais n'est pas encore connecté à une base de données
-- Les formulaires sont créés mais ne sont pas encore fonctionnels (pas de backend)
-- Les images sont actuellement des placeholders et devront être remplacées par des images réelles
-- L'authentification n'est pas encore implémentée
-- La page des avis clients est créée avec des données statiques mais n'est pas encore connectée à la base de données pour la gestion dynamique des avis
+4. **Déploiement et Tests**
+   - Déployer sur Vercel
+   - Effectuer des tests de performance
+   - Tester sur différents appareils et navigateurs
+   - Optimiser le SEO
 
 ## SQL pour Initialiser la Base de Données
 
@@ -348,22 +309,82 @@ VALUES
   ('srv_rideaux', 'Nettoyage de Rideaux et Stores', 'Nettoyage spécialisé pour rideaux et stores avec traitement anti-poussière.', 15.00, 'par m²', '/images/services/rideaux.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 ```
 
-## Variables d'Environnement (.env)
+## Configuration des Variables d'Environnement
 
-Créez un fichier `.env` à la racine du projet avec les informations suivantes:
+Le fichier `.env` à la racine du projet doit contenir les variables suivantes :
 
 ```
-# Base de données
-DATABASE_URL="postgresql://postgres:[MOT_DE_PASSE]@[URL_PROJET].supabase.co:5432/postgres"
+# Prisma
+DATABASE_URL=postgresql://postgres:[YOUR_DB_PASSWORD]@db.rebtybwqfrgllopaiyes.supabase.co:5432/postgres
 
 # Supabase
-NEXT_PUBLIC_SUPABASE_URL=https://[ID_PROJET].supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=[CLÉ_ANON]
+NEXT_PUBLIC_SUPABASE_URL=https://rebtybwqfrgllopaiyes.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[YOUR_SUPABASE_ANON_KEY]
 
 # NextAuth
-NEXTAUTH_SECRET=[GÉNÉREZ_UNE_CHAÎNE_ALÉATOIRE]
+NEXTAUTH_SECRET=[YOUR_NEXTAUTH_SECRET]
 NEXTAUTH_URL=http://localhost:3000
 ```
+
+Pour le déploiement en production, les variables d'environnement devront être configurées dans Vercel :
+- `NEXTAUTH_URL` devra être mis à jour avec l'URL de production
+- Les autres variables resteront les mêmes
+
+## Configuration de NextAuth.js
+
+Le fichier `src/lib/auth.ts` contient la configuration de NextAuth.js :
+
+```typescript
+import { NextAuthOptions } from 'next-auth';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { prisma } from './db';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { compare } from 'bcrypt';
+
+export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Mot de passe', type: 'password' }
+      },
+      async authorize(credentials) {
+        // Logique d'authentification
+      },
+    }),
+  ],
+  session: {
+    strategy: 'jwt',
+  },
+  pages: {
+    signIn: '/auth/signin',
+    signOut: '/auth/signout',
+    error: '/auth/error',
+    newUser: '/auth/signup',
+  },
+  callbacks: {
+    // Callbacks pour personnaliser les sessions et les JWT
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+};
+```
+
+## Schéma de Base de Données
+
+Le schéma Prisma (`prisma/schema.prisma`) définit les modèles suivants :
+
+1. **User** - Utilisateurs du système
+2. **Account** - Comptes d'authentification liés aux utilisateurs
+3. **Session** - Sessions utilisateur
+4. **VerificationToken** - Tokens pour la vérification d'email
+5. **Service** - Services proposés par l'entreprise
+6. **Reservation** - Réservations des clients
+7. **Realisation** - Réalisations/projets avec photos avant/après
+8. **Avis** - Avis clients
+
+Ces modèles sont liés entre eux par des relations définies dans le schéma Prisma.
 
 ## Commandes Utiles
 

@@ -3,8 +3,13 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
+    const reservationId = params.id;
+    
     // Get the user session
     const session = await getServerSession(authOptions);
     
@@ -27,42 +32,51 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
     
-    // Get the user's reservations
-    const reservations = await prisma.reservation.findMany({
+    // Get the specific reservation
+    const reservation = await prisma.reservation.findUnique({
       where: {
-        userId: user.id,
-      },
-      orderBy: {
-        createdAt: 'desc',
+        id: reservationId,
       },
       include: {
         items: {
           include: {
-            service: {
-              select: {
-                nom: true,
-              },
-            },
+            service: true,
           },
         },
       },
     });
     
-    // Format the reservations for the client
-    const formattedReservations = reservations.map(reservation => ({
+    // Check if the reservation exists and belongs to the user
+    if (!reservation) {
+      return NextResponse.json({ error: 'Reservation not found' }, { status: 404 });
+    }
+    
+    if (reservation.userId !== user.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    }
+    
+    // Format the reservation for the client
+    const formattedReservation = {
       id: reservation.id,
       date: reservation.dateService,
       heure: reservation.heureService,
       statut: reservation.statut,
       montantTotal: reservation.montantTotal,
+      adresse: reservation.adresse,
+      codePostal: reservation.codePostal,
+      ville: reservation.ville,
+      commentaire: reservation.commentaire,
       services: reservation.items.map(item => ({
+        id: item.service.id,
         nom: item.service.nom,
+        prix: item.prix,
+        description: item.service.description,
       })),
-    }));
+    };
     
-    return NextResponse.json(formattedReservations);
+    return NextResponse.json(formattedReservation);
   } catch (error) {
-    console.error('Error fetching user reservations:', error);
-    return NextResponse.json({ error: 'Error fetching reservations' }, { status: 500 });
+    console.error('Error fetching reservation details:', error);
+    return NextResponse.json({ error: 'Error fetching reservation details' }, { status: 500 });
   }
 }
