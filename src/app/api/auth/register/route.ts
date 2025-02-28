@@ -53,7 +53,10 @@ export async function POST(request: NextRequest) {
     });
     
     // Remove sensitive data
-    const { id, ...userWithoutId } = user;
+    const userWithoutId = { 
+      name: user.name,
+      email: user.email
+    };
     
     return NextResponse.json({ 
       message: 'Utilisateur créé avec succès',
