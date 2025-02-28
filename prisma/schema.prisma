@@ -70,6 +70,7 @@ model Service {
   prix        Float
   unite       String?  // ex: "par place", "par m²"
   image       String?
+  categorie   String?  // ex: "AMEUBLEMENT", "AUTOMOBILE", "PROFESSIONNEL", "SPECIAL"
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
