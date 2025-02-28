@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { prisma } from '@/lib/db';
 
 // Generate metadata for the page
 export async function generateMetadata({ params }: { params: { id: string } }) {
@@ -22,11 +21,15 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 // Get service data
 async function getService(id: string) {
   try {
-    const service = await prisma.service.findUnique({
-      where: { id },
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/services/${id}`, {
+      cache: 'no-store',
     });
     
-    return service;
+    if (!response.ok) {
+      return null;
+    }
+    
+    return await response.json();
   } catch (error) {
     console.error('Erreur lors de la récupération du service:', error);
     return null;

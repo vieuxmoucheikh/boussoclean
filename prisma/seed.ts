@@ -14,7 +14,7 @@ async function main() {
       prix: 79.99,
       unite: 'par canapé',
       image: '/images/services/canape.jpg',
-      categorie: 'AMEUBLEMENT'
+      category: 'AMEUBLEMENT'
     },
     {
       nom: 'Nettoyage de Matelas',
@@ -22,7 +22,7 @@ async function main() {
       prix: 69.99,
       unite: 'par matelas',
       image: '/images/services/matelas.jpg',
-      categorie: 'AMEUBLEMENT'
+      category: 'AMEUBLEMENT'
     },
     {
       nom: 'Nettoyage de Tapis et Moquettes',
@@ -30,7 +30,7 @@ async function main() {
       prix: 12.99,
       unite: 'par m²',
       image: '/images/services/tapis.jpg',
-      categorie: 'AMEUBLEMENT'
+      category: 'AMEUBLEMENT'
     },
     {
       nom: 'Nettoyage Intérieur Voiture',
@@ -38,7 +38,7 @@ async function main() {
       prix: 89.99,
       unite: 'par véhicule',
       image: '/images/services/voiture.jpg',
-      categorie: 'AUTOMOBILE'
+      category: 'AUTOMOBILE'
     },
     {
       nom: 'Nettoyage de Mobilier',
@@ -46,7 +46,7 @@ async function main() {
       prix: 49.99,
       unite: 'par pièce',
       image: '/images/services/mobilier.jpg',
-      categorie: 'AMEUBLEMENT'
+      category: 'AMEUBLEMENT'
     },
     {
       nom: 'Nettoyage de Rideaux et Stores',
@@ -54,7 +54,7 @@ async function main() {
       prix: 14.99,
       unite: 'par m²',
       image: '/images/services/rideaux.jpg',
-      categorie: 'AMEUBLEMENT'
+      category: 'AMEUBLEMENT'
     },
     {
       nom: 'Nettoyage de Bureaux',
@@ -62,7 +62,7 @@ async function main() {
       prix: 19.99,
       unite: 'par m²',
       image: '/images/services/bureau.jpg',
-      categorie: 'PROFESSIONNEL'
+      category: 'PROFESSIONNEL'
     },
     {
       nom: 'Nettoyage après Travaux',
@@ -70,7 +70,7 @@ async function main() {
       prix: 24.99,
       unite: 'par m²',
       image: '/images/services/travaux.jpg',
-      categorie: 'SPECIAL'
+      category: 'SPECIAL'
     }
   ];
 

@@ -1,5 +1,43 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+# Boussoclean - Site d'Entreprise de Nettoyage
+
+Ce projet est un site web complet pour une entreprise de nettoyage, permettant aux clients de consulter les services, demander des devis et gérer leurs réservations.
+
+## Documentation Spécifique
+
+- [Documentation d'Authentification](./README-AUTH.md) - Détails sur le système d'authentification
+- [Documentation Base de Données](./README-DATABASE.md) - Structure et utilisation de la base de données PostgreSQL
+
+## Technologies Utilisées
+
+- **Frontend**: Next.js 15, React, Tailwind CSS
+- **Backend**: API Routes Next.js
+- **Base de Données**: PostgreSQL avec requêtes SQL directes
+- **Authentification**: NextAuth.js
+
+## Configuration Requise
+
+### Variables d'Environnement
+
+Créez un fichier `.env.local` à la racine du projet avec les variables suivantes :
+
+```
+DATABASE_URL=postgresql://username:password@localhost:5432/boussoclean
+NEXTAUTH_SECRET=votre_secret_nextauth
+NEXTAUTH_URL=http://localhost:3000
+```
+
+### Base de Données
+
+1. Installez PostgreSQL
+2. Créez une base de données nommée `boussoclean`
+3. Exécutez les scripts SQL pour initialiser la base de données :
+   ```bash
+   psql -U username -d boussoclean -f prisma/schema.sql
+   psql -U username -d boussoclean -f prisma/seed.sql
+   ```
+
 ## Getting Started
 
 First, run the development server:
@@ -16,9 +54,26 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Fonctionnalités
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Page d'Accueil**: Présentation de l'entreprise et des services
+- **Services**: Catalogue des services proposés avec détails et tarifs
+- **Demande de Devis**: Formulaire pour demander un devis personnalisé
+- **Authentification**: Inscription et connexion des utilisateurs
+- **Espace Client**: Gestion du profil et des réservations
+- **Administration**: Gestion des services et des réservations (à venir)
+
+## Structure du Projet
+
+- `src/app/page.tsx`: Page d'accueil
+- `src/app/services/page.tsx`: Page des services
+- `src/app/devis/page.tsx`: Formulaire de demande de devis
+- `src/app/auth/`: Pages d'authentification
+- `src/app/dashboard/`: Espace client
+- `src/app/api/`: Routes API
+- `src/components/`: Composants réutilisables
+- `src/lib/`: Utilitaires et configuration
+- `prisma/`: Fichiers SQL pour la base de données
 
 ## Learn More
 

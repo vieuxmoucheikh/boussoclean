@@ -3,222 +3,319 @@
 Ce document détaille la structure, les fonctionnalités et les étapes d'implémentation du site web Boussoclean, une entreprise de nettoyage basée à Paris et en Île-de-France.
 
 ## Stack Technique
-- Next.js (App Router)
+- Next.js 15 (App Router)
 - TypeScript
 - Tailwind CSS + shadcn/ui
-- Supabase (PostgreSQL)
-- NextAuth.js (avec adaptateur Supabase)
-- Prisma ORM
+- PostgreSQL (requêtes SQL directes)
+- NextAuth.js
 - Vercel (hébergement)
-- GitHub (contrôle de version)
 
 ## Structure du Projet
 ```
 boussoclean/
 ├── prisma/
-│   └── schema.prisma      # Schéma de la base de données
+│   ├── schema.sql         # Schéma SQL de la base de données
+│   └── seed.sql           # Données initiales pour la base de données
 ├── public/                # Fichiers statiques (images, etc.)
 ├── src/
 │   ├── app/               # Pages de l'application (Next.js App Router)
 │   │   ├── page.tsx       # Page d'accueil
 │   │   ├── services/      # Page des services
-│   │   ├── tarifs/        # Page des tarifs avec calculateur
-│   │   ├── realisations/  # Galerie de réalisations
-│   │   ├── avis/          # Avis clients
-│   │   ├── a-propos/      # À propos de l'entreprise
-│   │   ├── contact/       # Page de contact et devis
-│   │   └── reservation/   # Système de réservation
+│   │   │   └── [id]/      # Page détaillée d'un service
+│   │   ├── devis/         # Page de demande de devis
+│   │   ├── auth/          # Pages d'authentification
+│   │   │   ├── signin/    # Connexion
+│   │   │   └── signup/    # Inscription
+│   │   ├── dashboard/     # Espace client
+│   │   │   ├── profile/   # Profil utilisateur
+│   │   │   └── reservations/ # Gestion des réservations
+│   │   ├── api/           # Routes API
+│   │   │   ├── auth/      # API d'authentification
+│   │   │   ├── services/  # API des services
+│   │   │   ├── user/      # API utilisateur
+│   │   │   └── reservations/ # API des réservations
 │   ├── components/        # Composants réutilisables
-│   │   ├── ui/            # Composants UI de base (shadcn/ui)
+│   │   ├── ui/            # Composants UI de base
 │   │   ├── layout/        # Composants de mise en page
-│   │   ├── forms/         # Formulaires
-│   │   ├── calculateur/   # Calculateur de tarifs
-│   │   ├── galerie/       # Composants pour la galerie
-│   │   └── chatbot/       # Chatbot intégré
+│   │   └── forms/         # Formulaires
 │   └── lib/               # Utilitaires et fonctions
-│       ├── db.ts          # Configuration de Prisma
-│       ├── supabase.ts    # Configuration de Supabase
+│       ├── db.ts          # Utilitaires pour les requêtes SQL
 │       └── auth.ts        # Configuration de NextAuth.js
-└── .env                   # Variables d'environnement (à créer)
+├── .env.local             # Variables d'environnement (à créer)
+├── README.md              # Documentation générale
+├── README-AUTH.md         # Documentation d'authentification
+└── README-DATABASE.md     # Documentation de la base de données
 ```
 
-## Étapes d'Implémentation
+## Base de Données
 
-### 1. Préparation de l'Environnement (FAIT)
-- [x] Création du projet Next.js avec TypeScript et Tailwind CSS
-- [x] Installation des dépendances principales
-- [x] Création du schéma Prisma
-- [x] Configuration de Git et GitHub
-- [x] Configuration de Supabase
-- [x] Configuration de NextAuth.js
+### Structure
 
-### 2. Configuration du Projet (FAIT)
-- [x] Mise en place de la structure des dossiers
-- [x] Configuration de Tailwind CSS
-- [x] Configuration de l'environnement de développement
-- [x] Création des variables d'environnement (.env)
-- [x] Migration du schéma Prisma vers Supabase
-- [x] Configuration complète de l'authentification avec NextAuth.js
+La base de données PostgreSQL comprend les tables suivantes :
 
-### 3. Déploiement (FAIT)
-- [x] Configuration de Vercel
-- [x] Résolution des problèmes de build
-- [x] Déploiement réussi sur Vercel
+- **User** : Utilisateurs du système
+- **Account** : Comptes d'authentification liés aux utilisateurs
+- **Session** : Sessions utilisateur
+- **VerificationToken** : Jetons de vérification pour la réinitialisation de mot de passe
+- **Service** : Services proposés par l'entreprise
+- **Reservation** : Réservations effectuées par les utilisateurs
+- **ReservationItem** : Services inclus dans une réservation
+- **Devis** : Devis générés pour les clients
+- **DevisItem** : Services inclus dans un devis
 
-## Configuration des Services
+### Connexion à la Base de Données
 
-### GitHub
-- [x] Initialisation du dépôt Git local
-- [x] Création du dépôt GitHub distant
-- [x] Premier commit et push
-- [x] Configuration du .gitignore
+L'application utilise le module `pg` pour se connecter à PostgreSQL et exécuter des requêtes SQL directes :
 
-### Supabase
-- [x] Création du projet Supabase
-- [x] Obtention des clés API et URL
-- [x] Configuration des variables d'environnement
-- [x] Migration du schéma de base de données
-- [ ] Configuration des politiques de sécurité RLS (Row Level Security)
-- [ ] Configuration des buckets pour le stockage des images
+```typescript
+// src/lib/db.ts
+import { Pool } from 'pg';
 
-### NextAuth.js
-- [x] Installation et configuration de base
-- [x] Intégration avec Prisma
-- [x] Configuration des pages d'authentification
-- [x] Test complet du flux d'authentification
-- [x] Configuration des callbacks et des hooks
-- [x] Mise en place de la protection des routes
-
-### Vercel
-- [x] Création du projet sur Vercel
-- [x] Configuration des variables d'environnement sur Vercel
-- [x] Premier déploiement
-- [ ] Configuration du domaine personnalisé
-- [ ] Mise en place des prévisualisations pour les pull requests
-
-## Problèmes Résolus
-
-### 1. Problèmes de TypeScript et ESLint lors du déploiement
-Nous avons rencontré des erreurs TypeScript et ESLint qui empêchaient le build sur Vercel.
-
-**Solution appliquée :**
-1. Ajout de la configuration dans `next.config.js` pour ignorer les erreurs TypeScript et ESLint pendant le build :
-```javascript
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+// Création du pool de connexions
+const getPool = () => {
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+  });
+  return pool;
 };
 
-module.exports = nextConfig;
+// Exécution d'une requête SQL
+const query = async (text: string, params: any[] = []) => {
+  const pool = getPool();
+  try {
+    return await pool.query(text, params);
+  } catch (error) {
+    console.error('Erreur lors de l'exécution de la requête SQL:', error);
+    throw error;
+  }
+};
+
+export { getPool, query };
 ```
 
-2. Correction des erreurs TypeScript dans les API routes :
-   - Ajout de types explicites pour les paramètres
-   - Utilisation de `any` temporairement pour certains types complexes
-   - Correction des imports non utilisés
+### Exemples de Requêtes SQL
 
-### 2. Problème avec useSearchParams() dans Next.js
-Le hook `useSearchParams()` devait être enveloppé dans un Suspense boundary.
+#### Récupération des Services
 
-**Solution appliquée :**
-1. Restructuration du composant d'erreur d'authentification pour utiliser Suspense :
+```sql
+SELECT * FROM "Service" WHERE categorie = $1 ORDER BY nom ASC;
+```
+
+#### Création d'une Réservation
+
+```sql
+-- Dans une transaction
+BEGIN;
+
+-- Insérer la réservation
+INSERT INTO "Reservation" (
+  id, date, statut, montantTotal, adresse, "codePostal", ville, commentaire, "userId"
+)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+RETURNING *;
+
+-- Insérer les éléments de réservation
+INSERT INTO "ReservationItem" (
+  id, "reservationId", "serviceId", quantite, prix
+)
+VALUES ($1, $2, $3, $4, $5);
+
+-- Mettre à jour le montant total
+UPDATE "Reservation"
+SET "montantTotal" = $1
+WHERE id = $2;
+
+COMMIT;
+```
+
+## Authentification
+
+Le système d'authentification utilise NextAuth.js avec un adaptateur personnalisé pour PostgreSQL.
+
+### Configuration
+
 ```typescript
-function ErrorContent() {
-  const searchParams = useSearchParams();
-  // Reste du code...
-}
+// src/lib/auth.ts
+import { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { query } from './db';
+import bcrypt from 'bcrypt';
 
-export default function AuthErrorPage() {
-  return (
-    <main>
-      <Suspense fallback={<div>Chargement...</div>}>
-        <ErrorContent />
-      </Suspense>
-    </main>
-  );
+export const authOptions: NextAuthOptions = {
+  providers: [
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Mot de passe', type: 'password' }
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+
+        // Récupérer l'utilisateur par email
+        const userSql = `
+          SELECT u.*, a.id as account_id, a.access_token 
+          FROM "User" u
+          LEFT JOIN "Account" a ON u.id = a."userId" AND a.provider = 'credentials'
+          WHERE u.email = $1
+        `;
+        
+        const userResult = await query(userSql, [credentials.email]);
+        
+        if (userResult.rows.length === 0) {
+          return null;
+        }
+        
+        const user = userResult.rows[0];
+        
+        // Vérifier le mot de passe
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password, 
+          user.access_token || ''
+        );
+        
+        if (!isPasswordValid) {
+          return null;
+        }
+        
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email
+        };
+      }
+    })
+  ],
+  // Configuration supplémentaire...
+};
+```
+
+## API Routes
+
+### Services API
+
+```typescript
+// src/app/api/services/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+import { query } from '@/lib/db';
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get('category');
+    
+    let servicesSql = 'SELECT * FROM "Service"';
+    const params: any[] = [];
+    
+    if (category) {
+      servicesSql += ' WHERE categorie = $1';
+      params.push(category);
+    }
+    
+    servicesSql += ' ORDER BY nom ASC';
+    
+    const servicesResult = await query(servicesSql, params);
+    return NextResponse.json(servicesResult.rows);
+  } catch (error) {
+    console.error('Erreur lors de la récupération des services:', error);
+    return NextResponse.json({ error: 'Erreur lors de la récupération des services' }, { status: 500 });
+  }
 }
 ```
 
-## Prochaines Étapes
+### Réservations API
 
-1. **Finaliser le Développement Frontend**
-   - Compléter les pages principales du site
-   - Améliorer l'expérience utilisateur et le design
-   - Optimiser pour les appareils mobiles
-   - Implémenter les animations et transitions
+```typescript
+// src/app/api/user/reservations/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { query } from '@/lib/db';
 
-2. **Développer les Fonctionnalités Principales**
-   - Finaliser le système de réservation
-   - Implémenter le calculateur de tarifs
-   - Créer la galerie de réalisations
-   - Développer le système d'avis clients
+export async function GET() {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session || !session.user) {
+      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
+    }
+    
+    const userEmail = session.user.email;
+    
+    if (!userEmail) {
+      return NextResponse.json({ error: 'Email utilisateur non trouvé' }, { status: 400 });
+    }
+    
+    // Récupérer l'ID de l'utilisateur
+    const userSql = 'SELECT id FROM "User" WHERE email = $1';
+    const userResult = await query(userSql, [userEmail]);
+    
+    if (userResult.rows.length === 0) {
+      return NextResponse.json({ error: 'Utilisateur non trouvé' }, { status: 404 });
+    }
+    
+    const userId = userResult.rows[0].id;
+    
+    // Récupérer les réservations de l'utilisateur avec les services associés
+    const reservationsSql = `
+      SELECT 
+        r.*, 
+        ri.id as item_id, ri.quantite, ri.prix, ri."serviceId",
+        s.id as service_id, s.nom as service_nom
+      FROM "Reservation" r
+      LEFT JOIN "ReservationItem" ri ON r.id = ri."reservationId"
+      LEFT JOIN "Service" s ON ri."serviceId" = s.id
+      WHERE r."userId" = $1
+      ORDER BY r."createdAt" DESC
+    `;
+    
+    const reservationsResult = await query(reservationsSql, [userId]);
+    
+    // Traiter les résultats pour regrouper par réservation
+    const reservationsMap = new Map();
+    
+    // Logique de traitement des résultats...
+    
+    return NextResponse.json(Array.from(reservationsMap.values()));
+  } catch (error) {
+    console.error('Erreur lors de la récupération des réservations:', error);
+    return NextResponse.json({ error: 'Erreur lors de la récupération des réservations' }, { status: 500 });
+  }
+}
+```
 
-3. **Sécurité et Performance**
-   - Configurer les politiques RLS dans Supabase
-   - Optimiser les requêtes à la base de données
-   - Mettre en place le stockage sécurisé des images
-   - Implémenter la validation des données côté serveur
+## Configuration du Projet
 
-4. **SEO et Accessibilité**
-   - Optimiser les métadonnées pour le SEO
-   - Améliorer l'accessibilité du site
-   - Ajouter les balises Open Graph pour les réseaux sociaux
-   - Configurer le sitemap et robots.txt
+### Variables d'Environnement
 
-5. **Tests et Finalisation**
-   - Effectuer des tests de performance
-   - Tester sur différents appareils et navigateurs
-   - Corriger les bugs et optimiser l'expérience utilisateur
-   - Préparer le site pour le lancement
-
-## Configuration des Variables d'Environnement
-
-Le fichier `.env` à la racine du projet contient les variables suivantes :
+Créez un fichier `.env.local` à la racine du projet avec les variables suivantes :
 
 ```
-# Prisma
-DATABASE_URL=postgresql://postgres:[YOUR_DB_PASSWORD]@db.rebtybwqfrgllopaiyes.supabase.co:5432/postgres
-
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=https://rebtybwqfrgllopaiyes.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=[YOUR_SUPABASE_ANON_KEY]
-
-# NextAuth
-NEXTAUTH_SECRET=[YOUR_NEXTAUTH_SECRET]
+DATABASE_URL=postgresql://username:password@localhost:5432/boussoclean
+NEXTAUTH_SECRET=votre_secret_nextauth
 NEXTAUTH_URL=http://localhost:3000
 ```
 
-Pour le déploiement en production, les variables d'environnement ont été configurées dans Vercel avec l'URL de production pour NEXTAUTH_URL.
+### Installation et Démarrage
 
-## Commandes Utiles
+1. Clonez le dépôt
+2. Installez les dépendances : `npm install`
+3. Configurez la base de données PostgreSQL
+4. Exécutez les scripts SQL pour initialiser la base de données :
+   ```bash
+   psql -U username -d boussoclean -f prisma/schema.sql
+   psql -U username -d boussoclean -f prisma/seed.sql
+   ```
+5. Démarrez le serveur de développement : `npm run dev`
 
-- Démarrer le serveur de développement: `npm run dev`
-- Générer le client Prisma: `npx prisma generate`
-- Pousser les changements vers la base de données: `npx prisma db push`
-- Construire l'application pour la production: `npm run build`
-- Démarrer l'application en production: `npm start`
+## Déploiement
 
-## Notes pour le Développement Futur
+Le projet est configuré pour être déployé sur Vercel. Assurez-vous de configurer les variables d'environnement sur la plateforme Vercel.
 
-1. **Gestion des Erreurs**
-   - Améliorer la gestion des erreurs côté client et serveur
-   - Implémenter un système de journalisation des erreurs
+## Ressources Supplémentaires
 
-2. **Internationalisation**
-   - Préparer le site pour une future internationalisation
-   - Structurer les textes pour faciliter la traduction
-
-3. **Intégrations**
-   - Intégrer un système de paiement (Stripe)
-   - Ajouter des intégrations avec des outils de marketing (Mailchimp, etc.)
-   - Configurer Google Analytics pour le suivi des utilisateurs
-
-4. **Fonctionnalités Avancées**
-   - Développer un tableau de bord administrateur
-   - Ajouter un système de notifications
-   - Implémenter un chatbot pour l'assistance client
+- [README.md](./README.md) - Documentation générale du projet
+- [README-AUTH.md](./README-AUTH.md) - Documentation détaillée du système d'authentification
+- [README-DATABASE.md](./README-DATABASE.md) - Documentation détaillée de la base de données

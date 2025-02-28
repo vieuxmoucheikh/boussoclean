@@ -1,0 +1,13 @@
+-- Clean up existing data
+DELETE FROM "Service";
+
+-- Insert services
+INSERT INTO "Service" ("id", "nom", "description", "prix", "unite", "image", "categorie", "createdAt", "updatedAt") VALUES
+('clsj1a0010000jtlcg8g0abcd', 'Nettoyage de Canapés', 'Nos experts redonnent vie à vos canapés grâce à notre procédé de nettoyage en profondeur. Nous éliminons taches, odeurs et acariens pour un résultat impeccable.', 79.99, 'par canapé', '/images/services/canape.jpg', 'AMEUBLEMENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('clsj1a0020001jtlcg8g0abce', 'Nettoyage de Matelas', 'Éliminez les allergènes, acariens et bactéries de votre matelas pour un sommeil plus sain et réparateur. Notre traitement en profondeur assainit complètement votre literie.', 69.99, 'par matelas', '/images/services/matelas.jpg', 'AMEUBLEMENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('clsj1a0030002jtlcg8g0abcf', 'Nettoyage de Tapis et Moquettes', 'Retrouvez l''éclat et la propreté de vos tapis et moquettes grâce à notre procédé d''extraction en profondeur. Nous traitons tous types de fibres avec des produits adaptés.', 12.99, 'par m²', '/images/services/tapis.jpg', 'AMEUBLEMENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('clsj1a0040003jtlcg8g0abcg', 'Nettoyage Intérieur Voiture', 'Redonnez à l''intérieur de votre véhicule sa propreté d''origine. Notre service complet traite sièges, moquettes, plafond et surfaces plastiques.', 89.99, 'par véhicule', '/images/services/voiture.jpg', 'AUTOMOBILE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('clsj1a0050004jtlcg8g0abch', 'Nettoyage de Mobilier', 'Nous prenons soin de tous vos meubles rembourrés avec des techniques adaptées à chaque type de tissu et de matériau.', 49.99, 'par pièce', '/images/services/mobilier.jpg', 'AMEUBLEMENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('clsj1a0060005jtlcg8g0abci', 'Nettoyage de Rideaux et Stores', 'Nos techniques spécialisées permettent de nettoyer vos rideaux et stores sans les démonter, éliminant poussière, allergènes et taches.', 14.99, 'par m²', '/images/services/rideaux.jpg', 'AMEUBLEMENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('clsj1a0070006jtlcg8g0abcj', 'Nettoyage de Bureaux', 'Service professionnel de nettoyage pour espaces de travail, incluant bureaux, salles de réunion et espaces communs.', 19.99, 'par m²', '/images/services/bureau.jpg', 'PROFESSIONNEL', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('clsj1a0080007jtlcg8g0abck', 'Nettoyage après Travaux', 'Remise en état complète après travaux de construction ou rénovation. Élimination des poussières fines et nettoyage en profondeur.', 24.99, 'par m²', '/images/services/travaux.jpg', 'SPECIAL', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

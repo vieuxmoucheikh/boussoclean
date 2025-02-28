@@ -133,6 +133,10 @@ model Reservation {
   statut        String   @default("confirmee") // confirmee, annulee, terminee
   montantTotal  Float
   paiementStatus String  @default("en_attente") // en_attente, paye
+  adresse       String
+  codePostal    String
+  ville         String
+  commentaire   String?  @db.Text
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   
