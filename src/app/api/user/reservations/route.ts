@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Get the user session
     const session = await getServerSession(authOptions);
@@ -49,13 +49,13 @@ export async function GET(request: NextRequest) {
     });
     
     // Format the reservations for the client
-    const formattedReservations = reservations.map(reservation => ({
+    const formattedReservations = reservations.map((reservation: any) => ({
       id: reservation.id,
       date: reservation.dateService,
       heure: reservation.heureService,
       statut: reservation.statut,
       montantTotal: reservation.montantTotal,
-      services: reservation.items.map(item => ({
+      services: reservation.items.map((item: any) => ({
         nom: item.service.nom,
       })),
     }));

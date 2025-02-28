@@ -61,9 +61,9 @@ export async function POST(request: NextRequest) {
     let montantTotal = 0;
     
     // Create devis items for each selected service
-    const devisItems = [];
+    // const devisItems = [];
     for (const serviceId of selectedServices) {
-      const service = services.find(s => s.id === serviceId);
+      const service = services.find((s: { id: string }) => s.id === serviceId);
       if (service) {
         // We're using a default quantity of 1 for now
         // In a real implementation, you'd capture quantities per service
@@ -105,7 +105,8 @@ export async function POST(request: NextRequest) {
 // Get all reservations (admin only in a real implementation)
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
+    // Commented out as it's not being used
+    // const session = await getServerSession(authOptions);
     
     // In a real implementation, check if user is admin
     // For now, just return a limited set of devis

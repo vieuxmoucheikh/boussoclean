@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     // In a real implementation, you would check if the user is an admin here
     
     const data = await request.json();
-    const { nom, description, prix, unite, image, categorie } = data;
+    const { nom, description, prix, unite, image } = data;
     
     // Validation
     if (!nom || !description || !prix) {
