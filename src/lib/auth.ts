@@ -3,7 +3,22 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from './db';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import * as bcrypt from 'bcrypt';
-import { User } from '@prisma/client';
+
+// Define the Account type based on our Prisma schema
+type Account = {
+  id: string;
+  userId: string;
+  type: string;
+  provider: string;
+  providerAccountId: string;
+  refresh_token?: string | null;
+  access_token?: string | null;
+  expires_at?: number | null;
+  token_type?: string | null;
+  scope?: string | null;
+  id_token?: string | null;
+  session_state?: string | null;
+};
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -36,7 +51,7 @@ export const authOptions: NextAuthOptions = {
 
           // Find the account with the password
           const account = user.accounts.find(
-            (account) => account.type === 'credentials'
+            (acc: Account) => acc.type === 'credentials'
           );
 
           if (!account) {
@@ -46,7 +61,7 @@ export const authOptions: NextAuthOptions = {
           // Verify password
           const passwordValid = await bcrypt.compare(
             credentials.password,
-            account.access_token || ''
+            account.access_token || '' 
           );
 
           if (!passwordValid) {
@@ -88,8 +103,8 @@ export const authOptions: NextAuthOptions = {
       }
       
       // Handle session update
-      if (trigger === 'update' && session) {
-        if (session.user?.name) {
+      if (trigger === 'update' && session?.user) {
+        if (session.user.name) {
           token.name = session.user.name;
         }
       }
